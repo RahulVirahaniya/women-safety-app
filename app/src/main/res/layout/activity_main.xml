@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:id="@+id/drawer">
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/newNumber"
+        android:text="Add Numbers"
+        />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/newNumber"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/update"
+        android:text="Update"
+        />
+    <Button
+        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_below="@id/update"
+        android:background="@drawable/shape_drawable"
+        android:layout_marginTop="70dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/sos"
+        android:text="sos"
+        />
+    <Button
+        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_below="@id/sos"
+        android:background="@drawable/shape_drawable"
+        android:layout_marginTop="70dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/shareLocation"
+        android:text="share location"
+        />
+    <TextView
+        android:layout_width="200dp"
+        android:id="@+id/text"
+        android:layout_height="50dp"
+        android:layout_below="@+id/shareLocation"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:textSize="20sp"
+        />
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/text"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/logout"
+        android:text="Logout"
+        android:onClick="Logout"
+        />
+
+</RelativeLayout>
