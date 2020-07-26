@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                                     Location location = new Location("providerNA");
                                     location.setLatitude(latitude);
                                     location.setLatitude(longitude);
-                                    fetchAddressFromLatLong(location);
+//                                    fetchAddressFromLatLong(location);
                                 }
                             }
                         }, Looper.getMainLooper());

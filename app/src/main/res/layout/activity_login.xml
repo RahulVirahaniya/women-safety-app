@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pic"
+    android:background="@drawable/back2"
     tools:context=".login">
     <TextView
         android:id="@+id/text1"
@@ -14,7 +14,7 @@
         android:gravity="center"
         android:text="Login"
         android:textColor="@color/colorAccent"
-        android:textSize="40sp"
+        android:textSize="50sp"
         android:textStyle="bold"
         app:fontFamily="@font/almendra_display" />
 
@@ -53,8 +53,8 @@
         android:layout_height="50dp"
         android:layout_below="@+id/password"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@color/colorPrimary"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/mybutton"
         android:gravity="center"
         android:text="LOGIN"
         />
@@ -64,14 +64,12 @@
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_below="@+id/login"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:text="Register"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/mybutton"
         android:layout_centerHorizontal="true"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:fontFamily="@font/almendra_display" />
+         />
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
