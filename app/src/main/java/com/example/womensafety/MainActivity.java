@@ -7,9 +7,14 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.ResultReceiver;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.Manifest;
@@ -37,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
     FirebaseFirestore fstore;
     FirebaseAuth fAuth;
     TextView textLatLong;
+    ResultReceiver resultReceiver;
     int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    String addressToSend;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         shareLocation = findViewById(R.id.shareLocation);
         fstore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
+        resultReceiver = new AddressResultReceiver(new Handler());
+
+
 
         userId = fAuth.getCurrentUser().getUid();
         final DocumentReference documentReference = fstore.collection("user").document(userId);
@@ -66,13 +77,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         ///////////////////////////////           ADD NEW NUMERS        //////////////////////////////////////
+
+
         addNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), addNumber.class));
             }
         });
+
+
         /////////////////////////////////   SOS     //////////////////////////////////
+
+
         sos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /////////////////////////////// SHARE LOCATION    /////////////////////////////////////////
+
+
         shareLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,13 +180,47 @@ public class MainActivity extends AppCompatActivity {
                                             locationResult.getLocations().get(lastestLocationIndex).getLongitude();
                                     textLatLong.setText(
                                         String.format(
-                                                "Latitude: %s/nLongitude: %s",latitude,longitude
+                                                 "Latitude: %s\nLongitude: %s",latitude,longitude
                                         )
                                     );
+                                    Location location = new Location("providerNA");
+                                    location.setLatitude(latitude);
+                                    location.setLatitude(longitude);
+                                    fetchAddressFromLatLong(location);
                                 }
                             }
                         }, Looper.getMainLooper());
 
+    }
+    private void fetchAddressFromLatLong(Location location){
+        Intent intent = new Intent(getApplicationContext(),fetchAddressIntentService.class);
+        intent.putExtra(constants.RECEIVER,resultReceiver);
+        intent.putExtra(constants.LOCATION_DATA_EXTRA,location);
+        startService(intent);
+    }
+
+    private class AddressResultReceiver extends ResultReceiver{
+
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            if(resultCode == constants.SUCCESS_RESULT)
+            {
+                addressToSend = resultData.getString(constants.RESULT_DATA_KEY);
+                Log.d("MyLocation" , addressToSend);
+                textLatLong.setText(addressToSend);
+//                Toast.makeText(MainActivity.this, "yayyy" ,Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                Toast.makeText(MainActivity.this,"NOOOOO",Toast.LENGTH_SHORT).show();
+//                resultData.getString(constants.RESULT_DATA_KEY)
+            }
+        }
     }
     public void Logout(View view)
     {
