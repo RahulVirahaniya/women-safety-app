@@ -118,6 +118,7 @@ public class register extends AppCompatActivity {
                                 }
                             });
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            finish();
                         }
                         else
                         {

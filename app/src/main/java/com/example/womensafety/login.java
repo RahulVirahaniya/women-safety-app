@@ -70,6 +70,7 @@ public class login extends AppCompatActivity {
                         {
                             Toast.makeText(login.this,"user logged in",Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            finish();
                         }
                         else
                         {
