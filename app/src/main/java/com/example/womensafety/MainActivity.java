@@ -1,14 +1,21 @@
 package com.example.womensafety;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -45,7 +52,13 @@ public class MainActivity extends AppCompatActivity {
     ResultReceiver resultReceiver;
     int REQUEST_CODE_LOCATION_PERMISSION = 1;
     String addressToSend;
+    private SensorManager sensorManager;
+    String currentLocation1 ,currentLocation2,currentLocation;
 
+
+    private float acelVal;
+    private float acelLast;
+    private float shake;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +75,17 @@ public class MainActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         resultReceiver = new AddressResultReceiver(new Handler());
 
+        ///////////////////////////////       Sensor/Shake Detector        ////////////////////////////////////
 
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensorManager.registerListener(sensorListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+        acelVal = SensorManager.GRAVITY_EARTH;
+        acelLast = SensorManager.GRAVITY_EARTH;
+        shake = 0.00f;
+
+
+        //////////////////////             Retrieving data from FireStore             //////////////////////////////////
 
         userId = fAuth.getCurrentUser().getUid();
         final DocumentReference documentReference = fstore.collection("user").document(userId);
@@ -91,17 +114,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         sos.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
             @Override
             public void onClick(View v) {
-                String sosMsg = " Danger SOS!!!!!!!!!!";
+                final boolean b1 = shareLocation.callOnClick();
+
+                String sosMsg = " Danger SOS!!!!!!!!!!"  + "\n" +  currentLocation ;
 
                 SmsManager mySmsManager = SmsManager.getDefault();
                 mySmsManager.sendTextMessage(phone1, null, sosMsg, null, null);
 
-                SmsManager mySmsManager2 = SmsManager.getDefault();
-                mySmsManager2.sendTextMessage(phone2, null, sosMsg, null, null);
+//                SmsManager mySmsManager2 = SmsManager.getDefault();
+//                mySmsManager2.sendTextMessage(phone2, null, sosMsg, null, null);
 
-//                mySmsManager.sendTextMessage(phone3,null, sosMsg,null,null);
+//                SmsManager mySmsManager3 = SmsManager.getDefault();
+//               mySmsManager3.sendTextMessage(phone3,null, sosMsg,null,null);
                 Toast.makeText(MainActivity.this, "Message Sent ", Toast.LENGTH_SHORT).show();
 //                Toast.makeText(MainActivity.this, phone1 + phone2 + phone3 , Toast.LENGTH_LONG).show();
             }
@@ -124,8 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     getCurrentLocation();
                 }
-
-
             }
         });
 
@@ -143,9 +168,14 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
             getCurrentLocation();
         } else {
-            Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
         }
     }
+
+
+
+    //////////////////////////////////   location provider ///////////////////////////////////////
+
 
     private void getCurrentLocation() {
 
@@ -183,6 +213,11 @@ public class MainActivity extends AppCompatActivity {
                                                  "Latitude: %s\nLongitude: %s",latitude,longitude
                                         )
                                     );
+//                                    currentLocation = "hello";
+                                    currentLocation1  = String.valueOf(latitude );
+                                    currentLocation2 = String.valueOf(longitude);
+                                    currentLocation = currentLocation1 + "\n"  + currentLocation2;
+
                                     Location location = new Location("providerNA");
                                     location.setLatitude(latitude);
                                     location.setLatitude(longitude);
@@ -222,10 +257,46 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    ///////////////////////////////   Logout ////////////////////////////////////
+
     public void Logout(View view)
     {
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(),login.class));
         finish();
     }
+
+
+    ////////////////////////////////      Shake Function      ///////////////////////////////
+
+
+    private final SensorEventListener sensorListener = new SensorEventListener() {
+        @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            acelLast = acelVal;
+            acelVal = (float) Math.sqrt( (double) (x*x + y*y + z*z));
+            float delta = acelVal - acelLast;
+            shake = shake * 0.9f + delta;
+             if (shake > 12)
+             {
+
+                 final boolean b1 = shareLocation.callOnClick();
+                 Toast.makeText(MainActivity.this,currentLocation, Toast.LENGTH_LONG).show();
+//                 final boolean b2 = sos.callOnClick();
+             }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        }
+    };
+
 }

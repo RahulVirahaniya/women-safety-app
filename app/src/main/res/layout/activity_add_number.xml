@@ -21,6 +21,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="120dp"
         android:layout_marginLeft="120dp"
+        android:inputType="number"
         android:layout_alignLeft="@+id/text1"
 
         />
@@ -40,6 +41,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginLeft="120dp"
         android:layout_below="@+id/number1"
+        android:inputType="number"
         android:layout_alignLeft="@+id/text1"
 
         />
@@ -59,6 +61,7 @@
         android:layout_marginTop="60dp"
         android:layout_below="@+id/number2"
         android:layout_marginLeft="120dp"
+        android:inputType="number"
         android:layout_alignLeft="@+id/text1"
 
         />

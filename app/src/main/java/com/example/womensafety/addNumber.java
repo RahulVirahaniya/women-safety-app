@@ -45,15 +45,18 @@ public class addNumber extends AppCompatActivity {
                 if(n1.length()!= 10)
                 {
                     number1.setError("Enter valid Number");
+                    return;
                 }
-                if(n2.length()!= 10)
-                {
-                    number2.setError("Enter valid Number");
-                }
-                if(n3.length()!= 10)
-                {
-                    number3.setError("Enter valid Number");
-                }
+//                if(n2.length()!= 10)
+//                {
+//                    number2.setError("Enter valid Number");
+//                    return;
+//                }
+//                if(n3.length()!= 10)
+//                {
+//                    number3.setError("Enter valid Number");
+//                    return;
+//                }
                 userId =  fAuth.getCurrentUser().getUid();
 
                 DocumentReference documentReference = fstore.collection("user").document(userId);
