@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class addNumber extends AppCompatActivity {
+public class AddNumber extends AppCompatActivity {
     EditText number1,number2,number3;
     Button submit;
     FirebaseFirestore fstore;
@@ -68,7 +67,7 @@ public class addNumber extends AppCompatActivity {
                 documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(addNumber.this,"Numbers are Stored" , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddNumber.this,"Numbers are Stored" , Toast.LENGTH_SHORT).show();
                     }
                 });
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));

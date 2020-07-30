@@ -4,23 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back2"
-    tools:context=".addNumber">
+    android:background="@drawable/back8"
+    tools:context=".AddNumber">
+
+    <TextView
+        android:id="@+id/heading1"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/myedtitext"
+        android:gravity="center"
+        android:text="Enter Phone Numbers"
+        android:textColor="@color/common_google_signin_btn_text_light_pressed"
+        android:textSize="30sp"
+        app:fontFamily="@font/almendra_display"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/text1"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginLeft="50dp"
-        android:text="Enter Number1 :" />
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="70dp"
+        android:gravity="center"
+        android:layout_below="@+id/heading1"
+        android:background="@drawable/myedtitext"
+        android:text="Enter Number1"/>
 
     <EditText
         android:id="@+id/number1"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="80dp"
         android:layout_marginLeft="120dp"
+        android:background="@drawable/myedtitext"
+        android:layout_below="@+id/heading1"
         android:inputType="number"
         android:layout_alignLeft="@+id/text1"
 
@@ -31,8 +50,10 @@
         android:layout_height="50dp"
         android:layout_below="@+id/text1"
         android:layout_marginTop="60dp"
-        android:layout_marginLeft="50dp"
-        android:text="Enter Number1 :" />
+        android:layout_marginLeft="70dp"
+        android:gravity="center"
+        android:background="@drawable/myedtitext"
+        android:text="Enter Number2" />
 
     <EditText
         android:id="@+id/number2"
@@ -41,6 +62,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginLeft="120dp"
         android:layout_below="@+id/number1"
+        android:background="@drawable/myedtitext"
         android:inputType="number"
         android:layout_alignLeft="@+id/text1"
 
@@ -51,8 +73,10 @@
         android:layout_height="50dp"
         android:layout_marginTop="60dp"
         android:layout_below="@+id/text2"
-        android:layout_marginLeft="50dp"
-        android:text="Enter Number1 :" />
+        android:layout_marginLeft="70dp"
+        android:gravity="center"
+        android:background="@drawable/myedtitext"
+        android:text="Enter Number3 " />
 
     <EditText
         android:id="@+id/number3"
@@ -61,17 +85,19 @@
         android:layout_marginTop="60dp"
         android:layout_below="@+id/number2"
         android:layout_marginLeft="120dp"
+        android:background="@drawable/myedtitext"
         android:inputType="number"
         android:layout_alignLeft="@+id/text1"
 
         />
     <Button
         android:id="@+id/addNumber"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/text3"
         android:layout_marginTop="50dp"
+        android:background="@drawable/mybutton"
         android:gravity="center"
         android:text="submit"
         />

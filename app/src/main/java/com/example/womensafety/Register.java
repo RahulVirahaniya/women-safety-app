@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,25 +11,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-public class register extends AppCompatActivity {
+public class Register extends AppCompatActivity {
     EditText mName,mEmail,mPassword,mPhone;
     Button mRegister;
     Button mlogin;
@@ -100,10 +95,10 @@ public class register extends AppCompatActivity {
                 fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(register.this,"user created",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this,"user created",Toast.LENGTH_SHORT).show();
                         if(task.isSuccessful())
                         {
-                            Toast.makeText(register.this,"user created",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this,"user created",Toast.LENGTH_SHORT).show();
                             userId = fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = fstore.collection("users").document(userId);
                             Map<String,Object>  user =  new HashMap<>();
@@ -122,7 +117,7 @@ public class register extends AppCompatActivity {
                         }
                         else
                         {
-                            Toast.makeText(register.this,"user cant be created" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this,"user cant be created" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -138,7 +133,7 @@ public class register extends AppCompatActivity {
         mlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),login.class));
+                startActivity(new Intent(getApplicationContext(), Login.class));
             }
         });
     }
@@ -164,7 +159,7 @@ public class register extends AppCompatActivity {
 //
 //            @Override
 //            public void onVerificationFailed(FirebaseException e) {
-//                Toast.makeText(register.this,"Task Failed "+  e.getMessage(),Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Register.this,"Task Failed "+  e.getMessage(),Toast.LENGTH_SHORT).show();
 //            }
 //        });
 //    }

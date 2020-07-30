@@ -11,11 +11,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-feature
         android:name="android.hardware.sensor.accelerometer"
-        android:required="true"
-        />
-
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +26,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-
             android:name=".SplashScreen"
             android:theme="@style/AppTheme_NoActionBar">
             <intent-filter>
@@ -35,8 +33,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
 
         <meta-data
@@ -46,24 +42,22 @@
         <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map" />
-        <activity android:name=".addNumber" />
+        <activity android:name=".AddNumber" />
         <activity android:name=".OTP" />
         <activity
-            android:name=".login"
+            android:name=".Login"
             android:theme="@style/AppTheme_NoActionBar" />
         <activity
-            android:name=".register"
-            android:theme="@style/AppTheme_NoActionBar">
-        </activity>
+            android:name=".Register"
+            android:theme="@style/AppTheme_NoActionBar"></activity>
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".MainActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name=".fetchAddressIntentService" />
+        <service android:name=".FetchAddressIntentService" />
     </application>
 
 </manifest>

@@ -2,19 +2,22 @@ package com.example.womensafety;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,16 +25,22 @@ import android.os.Looper;
 import android.os.ResultReceiver;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.Manifest;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -55,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     String currentLocation1 ,currentLocation2,currentLocation;
 
+    private DrawerLayout dl;
+    private ActionBarDrawerToggle t;
+    private NavigationView nv;
+    View header;
 
     private float acelVal;
     private float acelLast;
@@ -63,8 +76,53 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.navigation_drawer);
+
+
+        dl = findViewById(R.id.activity_main);
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
+
+
+        ///////////////////////////////    Nav Bar /////////////////////////////////////
+
+        t = new ActionBarDrawerToggle(this, dl, R.string.Open, R.string.Close);
+
+        dl.addDrawerListener(t);
+        t.syncState();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        nv = findViewById(R.id.nav_view);
+        header=nv.getHeaderView(0);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.nav_message:
+                        Toast.makeText(MainActivity.this, "My Message", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.nav_chat:
+                        Toast.makeText(MainActivity.this, "Chat", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.nav_profile:
+                        Toast.makeText(MainActivity.this, "My Profile", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.nav_logout:
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getApplicationContext(), Login.class));
+                        finish();
+                        break;
+                    default:
+                        return true;
+                }
+                return true;
+            }
+        });
+
+
+        ///////////////////////////////////////      Variable Declaration        ////////////////////////////////////////////
 
 
         addNo = findViewById(R.id.newNumber);
@@ -105,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         addNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), addNumber.class));
+                startActivity(new Intent(getApplicationContext(), AddNumber.class));
             }
         });
 
@@ -156,12 +214,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 //    public boolean checkPermission(String Permission)
 //    {
 //        int check = ContextCompat.checkSelfPermission(this,Permission);
 //        return (check== PackageManager.PERMISSION_GRANTED);
 //    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        t.syncState();
+    }
 
+        @Override
+        public void onConfigurationChanged(Configuration newConfig) {
+            super.onConfigurationChanged(newConfig);
+            t.onConfigurationChanged(newConfig);
+        }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -228,9 +298,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void fetchAddressFromLatLong(Location location){
-        Intent intent = new Intent(getApplicationContext(),fetchAddressIntentService.class);
-        intent.putExtra(constants.RECEIVER,resultReceiver);
-        intent.putExtra(constants.LOCATION_DATA_EXTRA,location);
+        Intent intent = new Intent(getApplicationContext(), FetchAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER,resultReceiver);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA,location);
         startService(intent);
     }
 
@@ -243,9 +313,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             super.onReceiveResult(resultCode, resultData);
-            if(resultCode == constants.SUCCESS_RESULT)
+            if(resultCode == Constants.SUCCESS_RESULT)
             {
-                addressToSend = resultData.getString(constants.RESULT_DATA_KEY);
+                addressToSend = resultData.getString(Constants.RESULT_DATA_KEY);
                 Log.d("MyLocation" , addressToSend);
                 textLatLong.setText(addressToSend);
 //                Toast.makeText(MainActivity.this, "yayyy" ,Toast.LENGTH_LONG).show();
@@ -263,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
     public void Logout(View view)
     {
         FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(),login.class));
+        startActivity(new Intent(getApplicationContext(), Login.class));
         finish();
     }
 
@@ -289,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
 
                  final boolean b1 = shareLocation.callOnClick();
                  Toast.makeText(MainActivity.this,currentLocation, Toast.LENGTH_LONG).show();
-//                 final boolean b2 = sos.callOnClick();
+                 final boolean b2 = sos.callOnClick();
              }
         }
 

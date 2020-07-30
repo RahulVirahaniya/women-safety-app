@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back2"
-    tools:context=".register">
+    android:background="@drawable/back8"
+    tools:context=".Register">
 
     <TextView
         android:id="@+id/text1"
@@ -87,7 +87,7 @@
 
     <Button
         android:id="@+id/login1"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_below="@+id/register1"
         android:layout_marginTop="20dp"
